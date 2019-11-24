@@ -1,9 +1,6 @@
-buildscript {
-    ext.kotlinVer = '1.3.5'
-}
 plugins {
-    id 'org.jetbrains.kotlin.multiplatform.gradle.plugin' version '1.3.5'
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.3.5'
+    id("org.jetbrains.kotlin.multiplatform") version "1.3.60"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.3.60"
 }
 repositories {
     mavenCentral()
@@ -18,24 +15,22 @@ kotlin {
         binaries {
             executable {
                 // Change to specify fully qualified name of your application's entry point:
-               entryPoint = 'main.main'
+                entryPoint = "main.main"
                 // Specify command-line arguments, if necessary:
-                runTask?.args('')
+                runTask?.args("")
             }
         }
     }
     sourceSets {
         // Note: To enable common source sets please comment out 'kotlin.import.noCommonSourceSets' property
         // in gradle.properties file and re-import your project in IDE.
-        macosMain {
+        val macosMain by getting {
             dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.3.60'
-                implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:0.14.0'
-                implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.14.0'
-                implementation 'org.jetbrains.kotlinx:kotlinx-io-native:0.1.15'
+                implementation("org.jetbrains.kotlin:kotlin-stdlib:1.3.60")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:0.14.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.14.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-io-native:0.1.14")
             }
-        }
-        macosTest {
         }
     }
 }
