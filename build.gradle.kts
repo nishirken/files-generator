@@ -26,10 +26,8 @@ kotlin {
         // in gradle.properties file and re-import your project in IDE.
         val macosMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-stdlib:1.3.60")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:0.14.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:0.14.0")
-                implementation("org.jetbrains.kotlinx:kotlinx-io-native:0.1.14")
             }
         }
     }

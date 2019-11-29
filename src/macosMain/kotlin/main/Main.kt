@@ -1,9 +1,25 @@
 package main
 
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
-import kotlinx.io.*
+import main.File
+import main.Folder
+import main.SettingsFile
+import platform.posix.*
+import kotlinx.cinterop.*
+
+//val appendCmd = "append"
+
+fun getHomeDir(): String? {
+    return getenv("HOME")?.toKString()
+}
 
 fun main (args: Array<String>) {
-    args.forEach(::println)
+    val homeDir = getHomeDir()
+    val settingsFolder = Folder(makeSettingsFolderName(homeDir))
+    if (!settingsFolder.isExists()) {
+        settingsFolder.create()
+    }
+    val settingsFile = SettingsFile(makeSettingsFileName(homeDir))
+    if (!settingsFile.isExists()) {
+        settingsFile.create()
+    }
 }
