@@ -28,14 +28,18 @@ class SettingsFile(private val filename: String) : File(filename) {
         return super.isExists()
     }
 
-    override fun create(): CPointer<FILE>? {
-        val pointer = super.create()
+    override fun create(): Unit {
+        super.create()
+        write(makeJsonContent(HashMap()))
+    }
 
-        if (pointer != null) {
-            val json = Json(JsonConfiguration.Stable)
-            fputs(json.stringify(SettingsContent.serializer(), SettingsContent(HashMap())), pointer)
-        }
+    fun setAlias(key: String, value: String): Unit {
+        val content = read()
+        val settings = Json(JsonConfiguration.Stable).parse<SettingsContent>(SettingsContent.serializer(), content)
+        write(makeJsonContent(settings.aliases.plus(Pair(key, value))))
+    }
 
-        return pointer
+    private fun makeJsonContent(aliases: Map<String, String>): String {
+        return Json(JsonConfiguration.Stable).stringify(SettingsContent.serializer(), SettingsContent(aliases))
     }
 }
