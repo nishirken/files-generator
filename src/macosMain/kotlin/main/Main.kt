@@ -3,6 +3,7 @@ package main
 import main.File
 import main.Folder
 import main.SettingsFile
+import main.parseArgs
 import platform.posix.*
 import kotlinx.cinterop.*
 
@@ -12,11 +13,10 @@ fun getHomeDir(): String? {
 
 fun main (args: Array<String>) {
     val homeDir = getHomeDir()
-//    val parser = ArgParser("file-generator-parser")
-//
-//    val alias by parser.option(ArgType.String, shortName = "alias", description = "Set an alias")
-//    val value by parser.option(ArgType.String, shortName = "value", description = "Set an alias")
-//    println(alias)
+    val parsedArgs = parseArgs(args)
+    for (arg in parsedArgs) {
+        println(arg)
+    }
 
     val settingsFolder = Folder(makeSettingsFolderName(homeDir))
     if (!settingsFolder.isExists()) {
