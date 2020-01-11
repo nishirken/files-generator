@@ -12,6 +12,9 @@ kotlin {
     // For MacOS, should be changed to e.g. macosX64
     // For Windows, should be changed to e.g. mingwX64
     macosX64("macos") {
+        val main by compilations.getting
+        val interop by main.cinterops.creating
+
         binaries {
             executable {
                 // Change to specify fully qualified name of your application's entry point:

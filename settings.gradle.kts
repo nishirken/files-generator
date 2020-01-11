@@ -1,2 +1,2 @@
-rootProject.name = "mobx-generator"
+rootProject.name = "files-generator"
 

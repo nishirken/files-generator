@@ -1,0 +1,13 @@
+#include <stdio.h>
+#include <unistd.h>
+---
+
+/// See CInterop documentation
+/// for more details of `.def` files
+/// https://kotlinlang.org/docs/reference/native/c_interop.html
+char* getCwd() {
+    char cwd[10000];
+    getcwd(cwd, sizeof(cwd));
+    return cwd;
+}
+

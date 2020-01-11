@@ -6,6 +6,7 @@ import main.SettingsFile
 import main.parseArgs
 import platform.posix.*
 import kotlinx.cinterop.*
+import interop.*
 
 fun getHomeDir(): String? {
     return getenv("HOME")?.toKString()
@@ -17,7 +18,8 @@ fun main (args: Array<String>) {
     for (arg in parsedArgs) {
         println(arg)
     }
-
+    val cwd = getCwd()?.toKString()
+    println(cwd)
     val settingsFolder = Folder(makeSettingsFolderName(homeDir))
     if (!settingsFolder.isExists()) {
         settingsFolder.create()
