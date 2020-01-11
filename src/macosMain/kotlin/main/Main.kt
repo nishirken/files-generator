@@ -12,23 +12,27 @@ fun getHomeDir(): String? {
     return getenv("HOME")?.toKString()
 }
 
-fun main (args: Array<String>) {
+fun setup() {
     val homeDir = getHomeDir()
-    val parsedArgs = parseArgs(args)
-    for (arg in parsedArgs) {
-        println(arg)
-    }
-    val cwd = getCwd()?.toKString()
-    println(cwd)
+
     val settingsFolder = Folder(makeSettingsFolderName(homeDir))
     if (!settingsFolder.isExists()) {
         settingsFolder.create()
     }
+
     val settingsFile = SettingsFile(makeSettingsFileName(homeDir))
     if (!settingsFile.isExists()) {
         settingsFile.create()
     }
-    settingsFile.setAlias("s", "State")
-    settingsFile.setAlias("s", "State")
-    settingsFile.setAlias("r", "State")
+}
+
+fun main (args: Array<String>) {
+    setup()
+
+    val parsedArgs = parseArgs(args)
+    for (arg in parsedArgs) {
+        println(arg)
+    }
+
+    val cwd = getCwd()?.toKString()
 }
