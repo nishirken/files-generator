@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 ---
 
 /// See CInterop documentation
@@ -9,5 +12,13 @@ char* getCwd() {
     char cwd[10000];
     getcwd(cwd, sizeof(cwd));
     return cwd;
+}
+
+void createFile(char *path) {
+    fopen(path, "w");
+}
+
+void createDirectory(char *path) {
+    mkdir(path, 0700);
 }
 

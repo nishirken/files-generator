@@ -18,3 +18,13 @@ fun parseArgs(args: Array<String>): ArrayList<Pair<String, ArrayList<String>>> {
     xs.add(Pair<String, ArrayList<String>>(fst, snd))
     return xs
 }
+
+fun findValue(key: String, args: ArrayList<Pair<String, ArrayList<String>>>): ArrayList<String>? {
+    for (arg in args) {
+        val k = arg.first
+        if (k.endsWith(key)) {
+            return arg.second
+        }
+    }
+    return null
+}
