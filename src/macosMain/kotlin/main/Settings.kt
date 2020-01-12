@@ -41,16 +41,14 @@ class SettingsFile(private val filename: String) : File(filename) {
 
     fun setAlias(key: String, value: String): Unit {
         val content = read()
-        val settings = Json(JsonConfiguration.Stable).parse<SettingsContent>(SettingsContent.serializer(), content)
+        val settings = Json(JsonConfiguration.Stable).parse(SettingsContent.serializer(), content)
         write(makeJsonContent(settings.aliases.plus(Pair(key, value))))
     }
 
-    @kotlinx.serialization.UnstableDefault
     fun parse(): Map<String, String> {
-        return Json.parse(SettingsContent.serializer(), read()).aliases
+        return Json(JsonConfiguration.Stable).parse(SettingsContent.serializer(), read()).aliases
     }
 
-    @kotlinx.serialization.UnstableDefault
     fun getAliasValue(alias: String?): String {
         if (alias == null) return "State"
         return parse()[alias] ?: "State"

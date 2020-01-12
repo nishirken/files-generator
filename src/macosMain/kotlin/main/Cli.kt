@@ -20,6 +20,14 @@ class Arguments(private val rawArgs: Array<String>) {
         return getSingleValue(findValue { it == "path" || it == "p" })
     }
 
+    fun getSetAliasArgument(): Pair<String, String>? {
+        val alias = findValue { it == "set-alias" }
+        if (alias == null || alias.size < 2) {
+            return null
+        }
+        return Pair(alias[0], alias[1])
+    }
+
     fun getAlias(): String? {
         val freeArguments = parsed.filter { !reservedArguments.contains(it.first) }
         return if (freeArguments.isNotEmpty()) freeArguments[0].first else null

@@ -12,7 +12,6 @@ fun getHomeDir(): String? {
     return getenv("HOME")?.toKString()
 }
 
-@kotlinx.serialization.UnstableDefault
 fun makeFiles(name: String, path: String, postfix: String = "") {
     val extension = ".ts"
     val finalName = name + postfix + extension
@@ -40,7 +39,6 @@ fun joinPaths(xs: String, ys: String): String {
     return "$fst/$snd"
 }
 
-@kotlinx.serialization.UnstableDefault
 fun main (args: Array<String>) {
     val homeDir = getHomeDir()
     createSettingsFolder(homeDir).createIfNotExists()
@@ -48,6 +46,13 @@ fun main (args: Array<String>) {
     settingsFile.createIfNotExists()
 
     val parsedArgs = Arguments(args)
+    val setAliasArgument = parsedArgs.getSetAliasArgument()
+
+    if (setAliasArgument !== null) {
+        settingsFile.setAlias(setAliasArgument.first, setAliasArgument.second)
+        return
+    }
+
     val pathArg = parsedArgs.getPathArgument() ?: getCwd()?.toKString() ?: "/"
     val nameArg = parsedArgs.getNameArgument() ?: return
     val postfix = parsedArgs.getPostfixArgument() ?: settingsFile.getAliasValue(parsedArgs.getAlias())
