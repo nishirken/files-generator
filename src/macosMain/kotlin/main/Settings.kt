@@ -7,7 +7,7 @@ import kotlinx.serialization.json.*
 import platform.posix.*
 import kotlinx.cinterop.*
 
-const val settingsFolder = ".file-generator"
+const val settingsFolder = ".files-generator"
 const val defaultFolder = "/temp"
 const val settingsFileName = "settings.json"
 
