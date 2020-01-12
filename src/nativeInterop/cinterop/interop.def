@@ -13,12 +13,3 @@ char* getCwd() {
     getcwd(cwd, sizeof(cwd));
     return cwd;
 }
-
-void createFile(char *path) {
-    fopen(path, "w");
-}
-
-void createDirectory(char *path) {
-    mkdir(path, 0700);
-}
-

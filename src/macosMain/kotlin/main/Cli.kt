@@ -1,30 +1,60 @@
 package main
 
-fun parseArgs(args: Array<String>): ArrayList<Pair<String, ArrayList<String>>> {
-    var xs = ArrayList<Pair<String, ArrayList<String>>>()
-    var fst = ""
-    var snd = ArrayList<String>()
-    for (arg in args) {
-        if (arg.startsWith("-")) {
-            if (snd.size != 0) {
-                xs.add(Pair<String, ArrayList<String>>(fst, snd))
-            }
-            fst = arg
-            snd = ArrayList()
-            continue
-        }
-        snd.add(arg)
-    }
-    xs.add(Pair<String, ArrayList<String>>(fst, snd))
-    return xs
-}
+import platform.posix.free
 
-fun findValue(key: String, args: ArrayList<Pair<String, ArrayList<String>>>): ArrayList<String>? {
-    for (arg in args) {
-        val k = arg.first
-        if (k.endsWith(key)) {
-            return arg.second
-        }
+typealias ParsedArguments = ArrayList<Pair<String, ArrayList<String>>>
+
+class Arguments(private val rawArgs: Array<String>) {
+    private val reservedArguments: Array<String> = arrayOf("postfix", "name", "n", "path", "p")
+    private val parsed: ParsedArguments = parseArgs()
+
+    fun getPostfixArgument(): String? {
+        return getSingleValue(findValue { it == "postfix" })
     }
-    return null
+
+    fun getNameArgument(): String? {
+        return getSingleValue(findValue { it == "name" || it == "n" })
+    }
+
+    fun getPathArgument(): String? {
+        return getSingleValue(findValue { it == "path" || it == "p" })
+    }
+
+    fun getAlias(): String? {
+        val freeArguments = parsed.filter { !reservedArguments.contains(it.first) }
+        return if (freeArguments.isNotEmpty()) freeArguments[0].first else null
+    }
+
+    private fun findValue(f: (key: String) -> Boolean): ArrayList<String>? {
+        for (arg in parsed) {
+            val key = arg.first
+            if (f(key)) {
+                return arg.second
+            }
+        }
+        return null
+    }
+
+    private fun getSingleValue(values: ArrayList<String>?): String? {
+        return if (values == null) null else values[0]
+    }
+
+    private fun parseArgs(): ParsedArguments {
+        var xs = ArrayList<Pair<String, ArrayList<String>>>()
+        var fst = ""
+        var snd = ArrayList<String>()
+        for (arg in rawArgs) {
+            if (arg.startsWith("-")) {
+                if (snd.size != 0) {
+                    xs.add(Pair(fst, snd))
+                }
+                fst = arg.replace("^(-?-)".toRegex(), "")
+                snd = ArrayList()
+                continue
+            }
+            snd.add(arg)
+        }
+        xs.add(Pair(fst, snd))
+        return xs
+    }
 }

@@ -3,7 +3,7 @@ package main
 import main.File
 import main.Folder
 import main.SettingsFile
-import main.parseArgs
+import main.Arguments
 import platform.posix.*
 import kotlinx.cinterop.*
 import interop.*
@@ -12,28 +12,20 @@ fun getHomeDir(): String? {
     return getenv("HOME")?.toKString()
 }
 
-fun setup() {
-    val homeDir = getHomeDir()
-
-    val settingsFolder = Folder(makeSettingsFolderName(homeDir))
-    if (!settingsFolder.isExists()) {
-        settingsFolder.create()
-    }
-
-    val settingsFile = SettingsFile(makeSettingsFileName(homeDir))
-    if (!settingsFile.isExists()) {
-        settingsFile.create()
-    }
-}
-
+@kotlinx.serialization.UnstableDefault
 fun makeFiles(name: String, path: String, postfix: String = "") {
     val extension = ".ts"
     val finalName = name + postfix + extension
-    val interfaceName = "I$finalName$extension"
-    createFile(joinPaths(path, finalName).cstr)
-    createFile(joinPaths(path, interfaceName).cstr)
-    createDirectory(joinPaths(path, "__mocks__").cstr)
-    createFile(joinPaths(joinPaths(path, "__mocks__"), finalName).cstr)
+    val interfaceName = "I$finalName"
+    val file = File(joinPaths(path, finalName))
+    val interfaceFile = File(joinPaths(path, interfaceName))
+    val mocksFolder = Folder(joinPaths(path, "__mocks__"))
+    val mockFile = File(joinPaths(joinPaths(path, "__mocks__"), finalName))
+
+    file.createIfNotExists()
+    interfaceFile.createIfNotExists()
+    mocksFolder.createIfNotExists()
+    mockFile.createIfNotExists()
 }
 
 fun joinPaths(xs: String, ys: String): String {
@@ -48,40 +40,17 @@ fun joinPaths(xs: String, ys: String): String {
     return "$fst/$snd"
 }
 
+@kotlinx.serialization.UnstableDefault
 fun main (args: Array<String>) {
-    setup()
+    val homeDir = getHomeDir()
+    createSettingsFolder(homeDir).createIfNotExists()
+    val settingsFile = createSettingsFile(homeDir)
+    settingsFile.createIfNotExists()
 
-    val parsedArgs = parseArgs(args)
-    val pathArg = findValue("path", parsedArgs)
+    val parsedArgs = Arguments(args)
+    val pathArg = parsedArgs.getPathArgument() ?: getCwd()?.toKString() ?: "/"
+    val nameArg = parsedArgs.getNameArgument() ?: return
+    val postfix = parsedArgs.getPostfixArgument() ?: settingsFile.getAliasValue(parsedArgs.getAlias())
 
-    var nameArg = findValue("name", parsedArgs)
-
-    if (nameArg == null) {
-        nameArg = findValue("n", parsedArgs)
-    }
-
-    if (nameArg == null) {
-        return
-    }
-
-    val postfixArg = findValue("p", parsedArgs)
-    var postfix = ""
-
-    if (postfixArg == null) {
-        postfix = "State"
-    } else {
-        postfix = postfixArg[0]
-    }
-
-    if (pathArg != null) {
-        val value = pathArg[0]
-        makeFiles(nameArg[0], value, postfix)
-    } else {
-        var cwd = getCwd()?.toKString()
-
-        if (cwd == null) {
-            cwd = "/"
-        }
-        makeFiles(nameArg[0], cwd, postfix)
-    }
+    makeFiles(nameArg, pathArg, postfix)
 }

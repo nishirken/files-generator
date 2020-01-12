@@ -12,4 +12,10 @@ class Folder(private val folderName: String) : FileObject {
     override fun create(): Unit {
         mkdir(folderName, S_IRWXU.or(S_IXGRP).or(S_IXOTH).toUShort())
     }
+
+    override fun createIfNotExists() {
+        if (!isExists()) {
+            create()
+        }
+    }
 }

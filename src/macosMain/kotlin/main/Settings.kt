@@ -7,23 +7,29 @@ import kotlinx.serialization.json.*
 import platform.posix.*
 import kotlinx.cinterop.*
 
-val settingsFolder = ".file-generator"
-val defaultFolder = "/temp"
+const val settingsFolder = ".file-generator"
+const val defaultFolder = "/temp"
+const val settingsFileName = "settings.json"
+
+@Serializable
+data class SettingsContent(val aliases: Map<String, String>) {}
 
 fun makeSettingsFolderName(basePath: String?): String {
     return (basePath ?: defaultFolder) + "/" + settingsFolder
 }
 
-val settingsFileName = "settings.json"
-
-fun makeSettingsFileName(basePath: String?): String {
-    return makeSettingsFolderName(basePath) + "/" + settingsFileName
+fun createSettingsFile(basePath: String?): SettingsFile {
+    val settingsFolderName = makeSettingsFolderName(basePath)
+    return SettingsFile("$settingsFolderName/$settingsFileName")
 }
 
-@Serializable
-data class SettingsContent(val aliases: Map<String, String>) {}
+fun createSettingsFolder(basePath: String?): Folder {
+    return Folder(makeSettingsFolderName(basePath))
+}
 
 class SettingsFile(private val filename: String) : File(filename) {
+    private val defaultPostfix: String = "State"
+
     override fun isExists(): Boolean {
         return super.isExists()
     }
@@ -37,6 +43,17 @@ class SettingsFile(private val filename: String) : File(filename) {
         val content = read()
         val settings = Json(JsonConfiguration.Stable).parse<SettingsContent>(SettingsContent.serializer(), content)
         write(makeJsonContent(settings.aliases.plus(Pair(key, value))))
+    }
+
+    @kotlinx.serialization.UnstableDefault
+    fun parse(): Map<String, String> {
+        return Json.parse(SettingsContent.serializer(), read()).aliases
+    }
+
+    @kotlinx.serialization.UnstableDefault
+    fun getAliasValue(alias: String?): String {
+        if (alias == null) return "State"
+        return parse()[alias] ?: "State"
     }
 
     private fun makeJsonContent(aliases: Map<String, String>): String {

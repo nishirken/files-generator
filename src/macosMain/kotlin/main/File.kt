@@ -13,6 +13,12 @@ open class File(private val filename: String) : FileObject {
         fopen(filename, "a")
     }
 
+    override fun createIfNotExists() {
+        if (!isExists()) {
+            create()
+        }
+    }
+
     open fun read(): String {
         val pointer = fopen(filename, "r")
         if (pointer == null) {
