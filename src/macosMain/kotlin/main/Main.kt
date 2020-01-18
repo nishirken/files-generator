@@ -4,13 +4,8 @@ import main.File
 import main.Folder
 import main.SettingsFile
 import main.Arguments
+import main.env
 import platform.posix.*
-import kotlinx.cinterop.*
-import interop.*
-
-fun getHomeDir(): String? {
-    return getenv("HOME")?.toKString()
-}
 
 fun classContent(name: String): String {
     return "export class $name {}\n"
@@ -52,7 +47,7 @@ fun joinPaths(xs: String, ys: String): String {
 }
 
 fun main (args: Array<String>) {
-    val homeDir = getHomeDir()
+    val homeDir = env.homeDir()
     createSettingsFolder(homeDir).createIfNotExists()
     val settingsFile = createSettingsFile(homeDir)
     settingsFile.createIfNotExists()
@@ -65,7 +60,7 @@ fun main (args: Array<String>) {
         return
     }
 
-    val pathArg = parsedArgs.getPathArgument() ?: getCwd()?.toKString() ?: "/"
+    val pathArg = parsedArgs.getPathArgument() ?: env.cwd() ?: "/"
     val nameArg = parsedArgs.getNameArgument() ?: return
     val postfix = parsedArgs.getPostfixArgument() ?: settingsFile.getAliasValue(parsedArgs.getAlias())
 
