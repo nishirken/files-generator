@@ -28,7 +28,7 @@ fun createSettingsFolder(basePath: String?): Folder {
 }
 
 class SettingsFile(private val filename: String) : File(filename) {
-    private val defaultPostfix: String = "State"
+    private val defaultPostfix: String = ""
 
     override fun isExists(): Boolean {
         return super.isExists()
@@ -50,8 +50,8 @@ class SettingsFile(private val filename: String) : File(filename) {
     }
 
     fun getAliasValue(alias: String?): String {
-        if (alias == null) return "State"
-        return parse()[alias] ?: "State"
+        if (alias == null) return defaultPostfix
+        return parse()[alias] ?: defaultPostfix
     }
 
     private fun makeJsonContent(aliases: Map<String, String>): String {
