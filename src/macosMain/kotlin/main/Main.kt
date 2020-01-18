@@ -12,6 +12,14 @@ fun getHomeDir(): String? {
     return getenv("HOME")?.toKString()
 }
 
+fun classContent(name: String): String {
+    return "export class $name {}\n"
+}
+
+fun interfaceContent(name: String): String {
+    return "export interface $name {}\n"
+}
+
 fun makeFiles(name: String, path: String, postfix: String = "") {
     val extension = ".ts"
     val finalName = name + postfix + extension
@@ -25,6 +33,10 @@ fun makeFiles(name: String, path: String, postfix: String = "") {
     interfaceFile.createIfNotExists()
     mocksFolder.createIfNotExists()
     mockFile.createIfNotExists()
+
+    file.write(classContent(name))
+    interfaceFile.write(interfaceContent("I$name"))
+    mockFile.write(classContent(name))
 }
 
 fun joinPaths(xs: String, ys: String): String {

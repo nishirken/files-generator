@@ -39,6 +39,8 @@ open class File(private val filename: String) : FileObject {
     }
 
     open fun write(content: String): Unit {
+        if (!isExists()) return
+
         val p = fopen(filename, "w")
         fputs(content, p)
         fclose(p)
