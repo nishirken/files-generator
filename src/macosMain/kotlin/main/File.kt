@@ -19,6 +19,10 @@ open class File(private val filename: String) : FileObject {
         }
     }
 
+    override fun remove() {
+        remove(filename)
+    }
+
     open fun read(): String {
         val pointer = fopen(filename, "r")
         if (pointer == null) {

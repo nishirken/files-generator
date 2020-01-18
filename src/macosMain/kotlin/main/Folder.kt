@@ -13,6 +13,10 @@ class Folder(private val folderName: String) : FileObject {
         mkdir(folderName, S_IRWXU.or(S_IXGRP).or(S_IXOTH).toUShort())
     }
 
+    override fun remove() {
+        unlink(folderName)
+    }
+
     override fun createIfNotExists() {
         if (!isExists()) {
             create()

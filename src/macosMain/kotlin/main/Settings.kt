@@ -30,10 +30,6 @@ fun createSettingsFolder(basePath: String?): Folder {
 class SettingsFile(private val filename: String) : File(filename) {
     private val defaultPostfix: String = ""
 
-    override fun isExists(): Boolean {
-        return super.isExists()
-    }
-
     override fun create(): Unit {
         super.create()
         write(makeJsonContent(HashMap()))
