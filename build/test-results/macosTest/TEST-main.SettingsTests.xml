@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="main.SettingsTests" tests="4" skipped="0" failures="0" errors="0" timestamp="2020-01-18T21:16:57" hostname="MacBook-Pro-MacBook.local" time="0.002">
+<testsuite name="main.SettingsTests" tests="4" skipped="0" failures="0" errors="0" timestamp="2020-01-19T16:26:01" hostname="MacBook-Pro-MacBook.local" time="0.003">
   <properties/>
-  <testcase name="create settings file and write empty content" classname="main.SettingsTests" time="0.0"/>
+  <testcase name="create settings file and write empty content" classname="main.SettingsTests" time="0.001"/>
   <testcase name="set alias" classname="main.SettingsTests" time="0.001"/>
   <testcase name="get aliases" classname="main.SettingsTests" time="0.0"/>
   <testcase name="get alias by value" classname="main.SettingsTests" time="0.0"/>

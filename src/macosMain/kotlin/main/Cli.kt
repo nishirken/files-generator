@@ -1,8 +1,9 @@
 package main
 
+import platform.AudioToolbox.AudioUnitProperty
 import platform.posix.free
 
-typealias ParsedArguments = ArrayList<Pair<String, ArrayList<String>>>
+typealias ParsedArguments = List<Pair<String, List<String>>>
 
 class Arguments(private val rawArgs: Array<String>) {
     private val reservedArguments: Array<String> = arrayOf("postfix", "name", "n", "path", "p")
@@ -29,11 +30,13 @@ class Arguments(private val rawArgs: Array<String>) {
     }
 
     fun getAlias(): String? {
-        val freeArguments = parsed.filter { !reservedArguments.contains(it.first) }
-        return if (freeArguments.isNotEmpty()) freeArguments[0].first else null
+        val keys = parsed.map { it.first }
+        val freeArguments = keys.filter { !reservedArguments.contains(it) }
+        val hasPostfix = keys.contains("postfix")
+        return if (freeArguments.isNotEmpty() && !hasPostfix) freeArguments[0] else null
     }
 
-    private fun findValue(f: (key: String) -> Boolean): ArrayList<String>? {
+    private fun findValue(f: (key: String) -> Boolean): List<String>? {
         for (arg in parsed) {
             val key = arg.first
             if (f(key)) {
@@ -43,26 +46,22 @@ class Arguments(private val rawArgs: Array<String>) {
         return null
     }
 
-    private fun getSingleValue(values: ArrayList<String>?): String? {
+    private fun getSingleValue(values: List<String>?): String? {
         return if (values == null) null else values[0]
     }
 
     private fun parseArgs(): ParsedArguments {
-        var xs = ArrayList<Pair<String, ArrayList<String>>>()
-        var fst = ""
-        var snd = ArrayList<String>()
-        for (arg in rawArgs) {
-            if (arg.startsWith("-")) {
-                if (snd.size != 0) {
-                    xs.add(Pair(fst, snd))
-                }
-                fst = arg.replace("^(-?-)".toRegex(), "")
-                snd = ArrayList()
-                continue
-            }
-            snd.add(arg)
+        return collect(rawArgs.toList(), ArrayList())
+    }
+
+    private fun collect(args: List<String>, acc: ParsedArguments): ParsedArguments {
+        if (args.isEmpty()) {
+            return acc
         }
-        xs.add(Pair(fst, snd))
-        return xs
+
+        val clearedKey = args.first().replace("^(-?-)".toRegex(), "")
+        val values = args.drop(1).takeWhile { !it.startsWith("-") }
+        val rest = args.drop(1).dropWhile { !it.startsWith("-") }
+        return collect(rest, acc.plus(Pair(clearedKey, values)))
     }
 }
