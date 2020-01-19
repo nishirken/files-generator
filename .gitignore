@@ -1,2 +1,5 @@
 .idea/
 .gradle
+/build/classes
+/build/reports
+/build/test-results

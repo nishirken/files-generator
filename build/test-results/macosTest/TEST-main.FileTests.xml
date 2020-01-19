@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="main.FileTests" tests="3" skipped="0" failures="0" errors="0" timestamp="2020-01-19T16:26:01" hostname="MacBook-Pro-MacBook.local" time="0.001">
-  <properties/>
-  <testcase name="create and exists" classname="main.FileTests" time="0.0"/>
-  <testcase name="create if not exists" classname="main.FileTests" time="0.0"/>
-  <testcase name="write and read" classname="main.FileTests" time="0.0"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
