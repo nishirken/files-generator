@@ -6,6 +6,7 @@ import main.SettingsFile
 import main.Arguments
 import main.env
 import platform.posix.*
+import ui.*
 
 fun classContent(name: String): String {
     return "export class $name {}\n"
@@ -47,6 +48,7 @@ fun joinPaths(xs: String, ys: String): String {
 }
 
 fun main (args: Array<String>) {
+    makeWindow()
     val homeDir = env.homeDir()
     createSettingsFolder(homeDir).createIfNotExists()
     val settingsFile = createSettingsFile(homeDir)
