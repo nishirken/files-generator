@@ -58,6 +58,18 @@ class ArgumentsTests {
     }
 
     @Test
+    fun `return true without test if exists`() {
+        assertTrue { Arguments(arrayOf("--without-test")).getWithoutTestArgument() }
+        assertTrue { Arguments(arrayOf("-n", "Name", "-p", "path", "-wt")).getWithoutTestArgument() }
+    }
+
+    @Test
+    fun `return false without test if not exists`() {
+        val args = Arguments(arrayOf("-p", "/Users", "-n", "Name"))
+        assertTrue { !args.getWithoutTestArgument() }
+    }
+
+    @Test
     fun `return alias if exists in the end, skip rest`() {
         val args = Arguments(arrayOf("-p", "/Users", "-n", "Name", "-s", "-k"))
         println(args.getAlias())
@@ -73,12 +85,11 @@ class ArgumentsTests {
     @Test
     fun `return null alias if postfix exists`() {
         val args = Arguments(arrayOf("-p", "/Users", "-n", "Name", "--postfix", "State", "-s"))
-        println(args.getAlias())
         assertTrue { args.getAlias() == null }
     }
 
     @Test
-    fun `return null alias if exists in the mid`() {
+    fun `return alias if exists in the mid`() {
         val args = Arguments(arrayOf("-p", "/Users", "-s", "-n", "Name"))
         assertTrue { args.getAlias() == "s" }
     }
