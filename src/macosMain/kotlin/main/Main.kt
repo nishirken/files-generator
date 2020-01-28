@@ -9,19 +9,21 @@ import platform.posix.*
 import ui.*
 
 fun classContent(name: String, interfaceName: String): String {
-    return """
-        import { $interfaceName } from './$interfaceName';
+    return (
+"""import { $interfaceName } from './$interfaceName';
 
-        export class $name implements $interfaceName {}
-    """
+export class $name implements $interfaceName {}
+"""
+    )
 }
 
 fun mockContent(name: String, interfaceName: String, path: String): String {
-    return """
-        import { $interfaceName } from ${joinPaths(path, interfaceName)};
+    return (
+"""import { $interfaceName } from ${joinPaths(path, interfaceName)};
 
-        export class $name implements $interfaceName {}
-    """
+export class $name implements $interfaceName {}
+"""
+    )
 }
 
 fun interfaceContent(name: String): String {
@@ -29,11 +31,12 @@ fun interfaceContent(name: String): String {
 }
 
 fun testContent(name: String): String {
-    return """
-        import { $name } from './$name'; 
+    return (
+"""import { $name } from './$name'; 
     
-        return "describe('$name', () => {});" 
-    """
+return "describe('$name', () => {});" 
+"""
+    )
 }
 
 fun makeFiles(name: String, path: String, postfix: String = "", withTest: Boolean = true) {
