@@ -19,7 +19,7 @@ export class $name implements $interfaceName {}
 
 fun mockContent(name: String, interfaceName: String, path: String): String {
     return (
-"""import { $interfaceName } from ${joinPaths(path, interfaceName)};
+"""import { $interfaceName } from '${joinPaths(path, interfaceName)}';
 
 export class $name implements $interfaceName {}
 """
@@ -33,8 +33,8 @@ fun interfaceContent(name: String): String {
 fun testContent(name: String): String {
     return (
 """import { $name } from './$name'; 
-    
-return "describe('$name', () => {});" 
+
+describe('$name', () => {}); 
 """
     )
 }
