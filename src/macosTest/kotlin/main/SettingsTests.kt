@@ -15,9 +15,7 @@ class SettingsTests {
 
     @AfterTest
     fun afterTest() {
-        if (settingsFile.isExists()) {
-            settingsFile.remove()
-        }
+        settingsFile.remove()
     }
 
     @Test

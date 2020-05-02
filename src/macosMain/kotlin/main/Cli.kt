@@ -6,7 +6,7 @@ import platform.posix.free
 typealias ParsedArguments = List<Pair<String, List<String>>>
 
 class Arguments(private val rawArgs: Array<String>) {
-    private val reservedArguments: Array<String> = arrayOf("postfix", "name", "n", "path", "p", "without-test", "wt")
+    private val reservedArguments: Array<String> = arrayOf("postfix", "name", "n", "path", "p", "without-test", "wt", "directory", "d")
     private val parsed: ParsedArguments = parseArgs()
 
     fun getPostfixArgument(): String? {
@@ -19,6 +19,10 @@ class Arguments(private val rawArgs: Array<String>) {
 
     fun getPathArgument(): String? {
         return getSingleValue(findValue { it == "path" || it == "p" })
+    }
+
+    fun getWithDirectory(): Boolean {
+        return findValue { it == "directory" || it == "d" } != null
     }
 
     fun getWithoutTestArgument(): Boolean {

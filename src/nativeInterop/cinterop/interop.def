@@ -13,3 +13,7 @@ char* getCwd() {
     getcwd(cwd, sizeof(cwd));
     return cwd;
 }
+
+int removeDir(char* path) {
+    return unlink(path);
+}

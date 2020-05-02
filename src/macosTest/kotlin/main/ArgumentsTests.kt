@@ -93,4 +93,16 @@ class ArgumentsTests {
         val args = Arguments(arrayOf("-p", "/Users", "-s", "-n", "Name"))
         assertTrue { args.getAlias() == "s" }
     }
+
+    @Test
+    fun `return null directory if not exists`() {
+        val args = Arguments(arrayOf("-p", "/Users", "-n", "Name", "--postfix", "State", "-s"))
+        assertTrue { !args.getWithDirectory() }
+    }
+
+    @Test
+    fun `return directory if exists`() {
+        assertTrue { Arguments(arrayOf("-p", "/Users", "-s", "-n", "Name", "--directory")).getWithDirectory() }
+        assertTrue { Arguments(arrayOf("-p", "/Users", "-s", "-n", "Name", "-d")).getWithDirectory() }
+    }
 }
