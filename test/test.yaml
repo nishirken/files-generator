@@ -1,0 +1,6 @@
+sets:
+  redux:
+    actions: ""
+    reducers: ""
+  mobx:
+    state: ""
